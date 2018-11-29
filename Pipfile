@@ -4,12 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-resilient-circuits = "*"
-resilient = "*"
-requests = "*"
-algosec = "*"
+algosec-resilient = {editable = true, path = "."}
 
 [dev-packages]
+flake8 = "*"
+tox = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-responses = "*"
+pytest-resilient-circuits = "*"
 
 [requires]
 python_version = "3.6"

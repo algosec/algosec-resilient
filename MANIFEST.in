@@ -1,0 +1,4 @@
+include README.md
+include algosec/util/*
+include algosec/LICENSE
+include algosec/doc/*
