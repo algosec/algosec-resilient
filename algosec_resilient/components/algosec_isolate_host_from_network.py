@@ -9,8 +9,10 @@ from resilient_circuits import function, FunctionResult, FunctionError, StatusMe
 
 from algosec_resilient.components.algosec_base_component import AlgoSecComponent
 
+logger = logging.getLogger(__name__)
 
-class FunctionComponent(AlgoSecComponent):
+
+class AlgoSecIsolateHostFromNetwork(AlgoSecComponent):
     """Component that implements Resilient function 'algosec_isolate_host_from_network"""
 
     @function("algosec_isolate_host_from_network")
@@ -21,12 +23,13 @@ class FunctionComponent(AlgoSecComponent):
         Then AlgoSec's ActiveChange then automatically implements rule changes across all firewalls
         in the network to isolate the host completely.
         """
-        try:
-            # Get the function parameters:
-            algosec_hostname = kwargs.get("algosec_hostname")  # text
+        for message in self._logic(kwargs['algosec_hostname']):
+            yield message
 
-            log = logging.getLogger(__name__)
-            log.info("algosec_hostname: %s", algosec_hostname)
+    def _logic(self, algosec_hostname):
+        """The @function decorator offerend by resilient circuits is impossible to unit test..."""
+        try:
+            logger.info("algosec_hostname: %s", algosec_hostname)
 
             # PUT YOUR FUNCTION IMPLEMENTATION CODE HERE
             yield StatusMessage("starting...")
@@ -61,14 +64,13 @@ class FunctionComponent(AlgoSecComponent):
 
             yield StatusMessage("done...")
 
-            results = {
-                # 'success': True,
+            result = {
                 'id': int(change_request_url.split('=')[1]),
                 'hostname': algosec_hostname,
                 'url': change_request_url
             }
 
-            # Produce a FunctionResult with the results
-            yield FunctionResult(results)
+            # Produce a FunctionResult with the result
+            yield FunctionResult(result)
         except Exception:
             yield FunctionError()

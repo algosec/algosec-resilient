@@ -14,7 +14,7 @@ def config_section_data():
     config_data = dedent(
         u"""
         [algosec]
-        server=local.algosec.com
+        server_ip=local.algosec.com
         username=admin
         password=algosec
         ssl_enabled=true
@@ -23,6 +23,9 @@ def config_section_data():
         isolation_request_requestor_email=resilient@integration.dummy
         isolation_request_description=Isolation Request Initiated By The IBM Resilient Integration.
         isolation_request_template=
+
+        internet_connectivity_check_external_ip=8.8.8.8
+        internet_connectivity_check_service=http
         """
     )
     return config_data

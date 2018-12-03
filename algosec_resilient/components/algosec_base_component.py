@@ -12,10 +12,18 @@ class AlgoSecComponent(ResilientComponent):
 
     def __init__(self, opts):
         """constructor provides access to the configuration options"""
-        super(AlgoSecComponent, self).__init__(opts)
+        self._call_super(opts)
         self.options = opts.get("algosec", {})
         selftest.selftest_function(opts)
         self._setup_algosec_client()
+
+    def _call_super(self, opts):
+        """
+        Allow patching of the super call in unit tests....
+
+        The original ResilientComponent component is super complicated to simply unit test...
+        """
+        super(AlgoSecComponent, self).__init__(opts)
 
     def _setup_algosec_client(self):
         self.algosec = AlgosecClient(self.options)

@@ -11,8 +11,9 @@ flake8 = "*"
 tox = "*"
 pytest = "*"
 pytest-cov = "*"
-pytest-responses = "*"
 pytest-resilient-circuits = "*"
+mock = "*"
+six = "*"
 
 [requires]
 python_version = "3.6"

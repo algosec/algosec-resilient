@@ -1,3 +1,6 @@
 Pipfile.lock
+algosec_resilient.egg-info
 
 .idea
+build
+dist
