@@ -214,5 +214,3 @@ Since this process is pretty instruction-heavy, all of the details have been mov
 MIT. 
 
 See the full license [here](LICENSE).
-
-## Contribution
