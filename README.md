@@ -1,36 +1,41 @@
 # algosec-resilient [![Build Status](https://travis-ci.com/algosec/algosec-resilient.svg?branch=master)](https://travis-ci.com/algosec/algosec-resilient) [![Codecov](https://img.shields.io/codecov/c/github/algosec/algosec-resilient.svg)](https://codecov.io/gh/algosec/algosec-resilient)
 
+AlgoSec Incident Response extension for IBM Resilient.
+This module extends Resilient and automatically enriches security incidents with business and network context.
+It also allows the security analyst to quickly isolate compromised servers from the network, via AlgoSec, from the comfort of the Resilient UI.
+This extension requires the AlgoSec Security Management Solution to be deployed in your network, to provide the above capabilities.
+
 ## TOC
 
-1. [What's In This Package](#What's-In-This-Package)
-    1. Isolate IP From The Rest Of Your Network
-    2. List Associated Applications
-    3. Check If A Given IP Is Connected To The Internet
-2. [Installation & Configuration](#installation-&-configuration)
-    1. [TL; DR](#TL;-DR) - For the brave souls who wish to skip the instructions altogether.
-    2. Or a [Step by Step](#Installation) for a full in-depth explanation of each step we make.
-3. [Things You Should Know To Extend This Integration](#Development) (You should definitely totally ignore this section completely if you are just here to use this module =) )
+1. [Package Contents](#Package-Contents)
+    1. Isolate IP from the network
+    2. List associated business applications
+    3. Check if a given IP has access to the Internet
+2. [Installation & Configuration](#installation--configuration)
+    1. [TL; DR](#tl-dr) - Short version to get up and running quickly
+    2. Or a [Step by Step](#Installation) for a full in-depth explanation of each step we make
+3. [Develop & Extend](#Development) (for developers only)
 
 
-## What's In This Package
+## Package Contents
 
-The integration demonstrates key features offered by AlgoSec to simplify and enhance the security researcher's workflows. This package is also intended to support developers who wish to extend the functionality already offered. This package features 3 integration workflows:
+The integration demonstrates key features offered by AlgoSec to simplify and enhance the security analyst's workflows. This package is also intended to support developers who wish to extend the functionality already offered. The package features 3 integration workflows:
 
-1. Isolate IP Address From The Rest Of The Network - 
-2. List Associated Application By IP - 
-3. Check Internet Connectivity By IP - 
+1. __Isolate IP address from the network__ - Triggers a call to AlgoSec to open an automated change request to isolate a given server from the network, by blocking all traffic to and from the server on the relevant firewalls and security constructs around it.
+2. __List associated business application by IP__ - Find all business applications defined in AlgoSec that are associated with a given IP, to reflect the potential business impact (and relevant business owners) of this security incident
+3. __Check Internet connectivity by IP__ - Check if a given server has access to the internet (enriches security incident information with potential for data exfiltration)
 
 Please remember that each function is shipped both independently and as a part of a greater Workflow/Rule/Data Table example. To make it simple, please keep this in mind:
 
 * Each __Function__ is implemented as code in this module, and is imported into the Resilient UI.
 * Each __Function__ is shipped alongside an example __Workflow__. This __Workflow__ will call the __Function__ and will populate the results in a __Data Table__ that is also shipped together with this integration.
-* To see the results of the example __Workflows__, don't forget to [customize the incident layout with the AlgoSec tab](#configure-incident-layout) with the relevant Data Tables. 
+* To see the results of the example __Workflows__, don't forget to [customize the incident Artifacts tab layout](#configure-incident-layout) with the relevant Data Tables. 
 * Each one of the __Workflows__ are triggered by example __Rules__ shipped with this integration.
 * Some of the __Rules__ are automatic upon Incidents/Artifacts creation, and some are set to trigger when a specific menu-action is clicked.
 
-### Isolation Request
+### Configuration
 
-#### Configuration
+#### Isolation Request
 
 As mentioned, the isolation request function will create a new Traffic Change Request on AlgoSec FireFlow. To modify the default values that are used to create this Change Request you can simply modify values in your `app.config` file. 
 
@@ -41,24 +46,19 @@ The fields are:
 * `isolation_request_requestor_email`- The Change Request Requestor Name.
 * `isolation_request_email`- The Change Request Requestor email.
 
-
-### List Associated Applications
-
-### Check Internet Connectivity
-
-#### Configuration
+#### Check Internet Connectivity
 
 As mentioned, the internet connectivity check function will use AlgoSec Firewall Analyzer. The Firewall Analyzer query will check if the given IP has access to a specific Internet Node with a specific traffic service. By default we check if there is connectivity to `http` on `8.8.8.8`. To modify the default values that are used for this traffic simulation query simply modify values in your `app.config` file. 
 
 The fields are:
 * `internet_connectivity_check_external_ip`- Defaults to `8.8.8.8`.
-* `internet_connectivity_check_service`- Default to `http`.
+* `internet_connectivity_check_service`- Default to `any service`.
 
 ## Installation & Configuration
 
 ### TL; DR
 
-You are busy, you have no time for explanations. We get it, you'll catch up with all the explanations later...right?
+You are busy, you have no time for explanations. We get it, you'll catch up with all the explanations later... Right?
 
 1. Run this:
     
@@ -67,7 +67,7 @@ You are busy, you have no time for explanations. We get it, you'll catch up with
         vim ~/.resilient/app.config # Edit the connection details in the `algosec` section.
         resilient-circuits customize # Import all of the Functions/Workflows onto the Resilient UI
     
-2. [Add The AlgoSec Tab To The Incident Layout](#configure-incident-layout)
+2. [Add the AlgoSec data tables to the the Incident Layout](#configure-incident-layout)
 3. Run the `resilient-circuits` server to handle Function calls from the Resilient Server:
 
 
@@ -111,18 +111,17 @@ Simply run this:
         
 #### Configure Incident Layout
 
-All of the example Workflows are adding their results into dedicated Data Tables which are also shipped as part of this integration. In this step we will add a new "AlgoSec" tab to our incident layout so we can interactively see the helpful output of this integration.
+The Workflows in this integration add their results into dedicated Data Tables which are also shipped as part of this integration. In this step we will add the data tables to our incident layout so we can interactively see the helpful output of this integration. Since all of the Workflows relates to Artifacts, we'll add the data tables to the Artifacts Tab.
 
-To add the new AlgoSec tab to your incident layout:
+To add the new data tables to the Artifacts Tab:
 
 1. On the Resilient UI, go to __Customization Settings__ --> __Layout__ --> __Incident Tabs__ (on the left sidebar).
-2. Click __Add Tab__, input __AlgoSec__ for the __Tab Text__ and hit __Add__.
-3. Now you are on the page dedicated to the __AlgoSec__ Incident.
-4. On the right-hand side you'll see a box titled __Data Tables__. Simply drag and drop these Data Tables into the dashed-line box in the center column:
-    1. AlgoSec Associated Applications
-    2. AlgoSec Internet Connectivity Check
-    3. AlgoSec Isolation Requests
-5. Hit __Save__ and you are done. From now on you'll have the AlgoSec tab for all Resilient incidents. 
+2. Click the __Artifacts__ tab.
+3. On the right-hand side you'll see a box titled __Data Tables__. Simply drag and drop these Data Tables into the dashed-line box in the center column:
+    1. Associated Applications (AlgoSec)
+    2. Connectivity to Internet (AlgoSec)
+    3. Isolation Change Requests (AlgoSec)
+5. Hit __Save__ and you are done!
 
 ### Run The Integration
 

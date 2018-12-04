@@ -4,10 +4,9 @@
 
 import logging
 
-from resilient_circuits import function, FunctionResult, FunctionError, StatusMessage
+from resilient_circuits import function, FunctionResult, StatusMessage
 
 from algosec_resilient.components.algosec_base_component import AlgoSecComponent
-
 
 logger = logging.getLogger(__name__)
 
@@ -23,36 +22,34 @@ class AlgoSecListAssociatedApplications(AlgoSecComponent):
         Provides better assessment the risk of the incident. The results contain whether or not it's a critical
         application and a url link to the application on the AlgoSec BusinessFlow dashboard.
         """
-        for message in self._logic(kwargs['algosec_hostname']):
-            yield message
+        self.run_login(kwargs)
 
     def _logic(self, algosec_hostname):
+        """The @function decorator offerend by resilient circuits is impossible to unit test..."""
         client = self.algosec.business_flow()
-        try:
-            logger.info("algosec_hostname: %s", algosec_hostname)
+        logger.info("algosec_hostname: %s", algosec_hostname)
 
-            # PUT YOUR FUNCTION IMPLEMENTATION CODE HERE
-            yield StatusMessage("starting...")
+        # PUT YOUR FUNCTION IMPLEMENTATION CODE HERE
+        yield StatusMessage("starting...")
 
-            associated_applications = [
-                {
-                    'artifact_ip': algosec_hostname,
-                    'application_name': app_json['name'],
-                    'is_critical': client.is_application_critical(app_json),
-                    'businessflow_dashboard': client.get_abf_application_dashboard_url(
-                        app_json['revisionID']
-                    ),
-                }
-                for app_json in client.get_associated_applications(algosec_hostname)
-            ]
-
-            results = {
-                'success': True,
-                'entries': associated_applications
+        associated_applications = [
+            {
+                'artifact_ip': algosec_hostname,
+                'application_name': app_json['name'],
+                'is_critical': client.is_application_critical(app_json),
+                'businessflow_dashboard': '<a href="{}">{}</a>'.format(
+                    client.get_abf_application_dashboard_url(app_json['revisionID']),
+                    app_json['name']
+                ),
             }
-            yield StatusMessage("done...")
+            for app_json in client.get_associated_applications(algosec_hostname)
+        ]
 
-            # Produce a FunctionResult with the results
-            yield FunctionResult(results)
-        except Exception:
-            yield FunctionError()
+        results = {
+            'success': True,
+            'entries': associated_applications
+        }
+        yield StatusMessage("done...")
+
+        # Produce a FunctionResult with the results
+        yield FunctionResult(results)

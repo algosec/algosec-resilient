@@ -42,7 +42,8 @@ class TestAlgosecIsolateHostFromNetwork(object):
 
         assert type(result['id']) is int
         assert result['hostname'] == ip
-        assert result['url'] == 'https://{}/FireFlow/Ticket/Display.html?id={}'.format(
+        assert result['url'] == '<a href="https://{}/FireFlow/Ticket/Display.html?id={}">Change Request #{}</a>'.format(
             resilient_app_config.get('algosec', 'server_ip'),
+            result['id'],
             result['id'],
         )

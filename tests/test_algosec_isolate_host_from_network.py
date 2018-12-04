@@ -50,7 +50,7 @@ class TestAlgoSecIsolateHostFromNetwork(object):
         assert result == {
             'id': change_request_id,
             'hostname': ip,
-            'url': change_request_url
+            'url': '<a href="{}">Change Request #{}</a>'.format(change_request_url, change_request_id),
         }
 
     @mock.patch('algosec_resilient.components.algosec_client.FireFlowAPIClient.create_change_request')

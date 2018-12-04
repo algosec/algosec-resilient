@@ -20,10 +20,10 @@ class TestAlgoSecCheckHostInternetConnectivity(object):
         return AlgoSecCheckHostInternetConnectivity
 
     @pytest.mark.parametrize('device_allowance,expected_connectivity', [
-        (DeviceAllowanceState.PARTIALLY_BLOCKED, 'No'),
+        (DeviceAllowanceState.PARTIALLY_BLOCKED, 'Yes'),
         (DeviceAllowanceState.BLOCKED, 'No'),
         (DeviceAllowanceState.ALLOWED, 'Yes'),
-        (DeviceAllowanceState.NOT_ROUTED, 'Not Routed'),
+        (DeviceAllowanceState.NOT_ROUTED, 'No'),
     ])
     @mock.patch(
         'algosec_resilient.components.algosec_client.FirewallAnalyzerAPIClient.execute_traffic_simulation_query'
@@ -55,5 +55,5 @@ class TestAlgoSecCheckHostInternetConnectivity(object):
             'success': True,
             'artifact_ip': ip,
             'is_it_connected_to_the_internet': expected_connectivity,
-            'query_url': query_url
+            'query_url': '<a href="{}">Query Results</a>'.format(query_url),
         }

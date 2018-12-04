@@ -22,7 +22,7 @@ setup(
     long_description="Resilient Circuits Components For The AlgoSec Integration",
     install_requires=[
         'resilient_circuits>=30.0.0',
-        'algosec>=1.2.0',
+        'algosec>=1.2.1',
     ],
     packages=find_packages(),
     include_package_data=True,

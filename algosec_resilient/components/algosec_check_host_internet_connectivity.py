@@ -5,7 +5,7 @@
 import logging
 
 from algosec.models import DeviceAllowanceState
-from resilient_circuits import function, StatusMessage, FunctionResult, FunctionError
+from resilient_circuits import function, StatusMessage, FunctionResult
 
 from algosec_resilient.components.algosec_base_component import AlgoSecComponent
 
@@ -23,42 +23,38 @@ class AlgoSecCheckHostInternetConnectivity(AlgoSecComponent):
         The AlgoSec integration will check if a given host/IP is has access to a public
         known internet node such as 8.8.8.8.
         """
-        for message in self._logic(kwargs['algosec_hostname']):
-            yield message
+        self.run_login(kwargs)
 
     def _logic(self, algosec_hostname):
         """The @function decorator offerend by resilient circuits is impossible to unit test..."""
-        try:
-            logger.info("algosec_hostname: %s", algosec_hostname)
+        logger.info("algosec_hostname: %s", algosec_hostname)
 
-            # PUT YOUR FUNCTION IMPLEMENTATION CODE HERE
-            yield StatusMessage("starting...")
+        # PUT YOUR FUNCTION IMPLEMENTATION CODE HERE
+        yield StatusMessage("starting...")
 
-            query_dict = self.algosec.firewall_analyzer().execute_traffic_simulation_query(
-                algosec_hostname,
-                self.options['internet_connectivity_check_external_ip'],
-                self.options['internet_connectivity_check_service'],
-            )
+        query_dict = self.algosec.firewall_analyzer().execute_traffic_simulation_query(
+            algosec_hostname,
+            self.options['internet_connectivity_check_external_ip'],
+            self.options['internet_connectivity_check_service'],
+        )
 
-            query_result, query_url = query_dict['result'], query_dict['query_url']
+        query_result, query_url = query_dict['result'], query_dict['query_url']
 
-            if query_result == DeviceAllowanceState.ALLOWED:
-                is_it_connected_to_the_internet = 'Yes'
-            elif query_result == DeviceAllowanceState.NOT_ROUTED:
-                is_it_connected_to_the_internet = 'Not Routed'
-            else:
-                is_it_connected_to_the_internet = 'No'
+        if query_result in (DeviceAllowanceState.ALLOWED, DeviceAllowanceState.PARTIALLY_BLOCKED):
+            is_it_connected_to_the_internet = 'Yes'
+        elif query_result == DeviceAllowanceState.NOT_ROUTED:
+            is_it_connected_to_the_internet = 'No'
+        else:
+            is_it_connected_to_the_internet = 'No'
 
-            connectivity_result = {
-                'success': True,
-                'artifact_ip': algosec_hostname,
-                'is_it_connected_to_the_internet': is_it_connected_to_the_internet,
-                'query_url': query_url,
-            }
+        connectivity_result = {
+            'success': True,
+            'artifact_ip': algosec_hostname,
+            'is_it_connected_to_the_internet': is_it_connected_to_the_internet,
+            'query_url': '<a href="{}">Query Results</a>'.format(query_url),
+        }
 
-            yield StatusMessage("done...")
+        yield StatusMessage("done...")
 
-            # Produce a FunctionResult with the results
-            yield FunctionResult(connectivity_result)
-        except Exception:
-            yield FunctionError()
+        # Produce a FunctionResult with the results
+        yield FunctionResult(connectivity_result)

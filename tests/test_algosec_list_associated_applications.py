@@ -33,6 +33,8 @@ class TestAlgoSecListAssociatedApplications(object):
 
         mock_get_associated_applications.assert_called_once_with(ip)
 
+        app1_dashboard_url = 'https://algosec.server.net/BusinessFlow/#application/1/dashboard'
+        app2_dashboard_url = 'https://algosec.server.net/BusinessFlow/#application/2/dashboard'
         assert result == {
             'success': True,
             'entries': [
@@ -40,13 +42,13 @@ class TestAlgoSecListAssociatedApplications(object):
                     'artifact_ip': ip,
                     'application_name': 'app1',
                     'is_critical': True,
-                    'businessflow_dashboard': 'https://algosec.server.net/BusinessFlow/#!application/1/dashboard',
+                    'businessflow_dashboard': '<a href="{}">app1</a>'.format(app1_dashboard_url),
                 },
                 {
                     'artifact_ip': ip,
                     'application_name': 'app2',
                     'is_critical': False,
-                    'businessflow_dashboard': 'https://algosec.server.net/BusinessFlow/#!application/2/dashboard',
+                    'businessflow_dashboard': '<a href="{}">app2</a>'.format(app2_dashboard_url),
                 },
             ]
         }

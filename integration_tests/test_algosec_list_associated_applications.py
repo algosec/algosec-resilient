@@ -58,8 +58,9 @@ class TestAlgosecListAssociatedApplications(object):
             assert type(entry['application_name']) is str
             assert type(entry['is_critical']) is bool
             assert re.match(
-                r'https://{}/BusinessFlow/#!application/\d+/dashboard'.format(
-                    resilient_app_config.get('algosec', 'server_ip')
+                r'<a href="https://{}/BusinessFlow/#application/\d+/dashboard">{}</a>'.format(
+                    resilient_app_config.get('algosec', 'server_ip'),
+                    entry['application_name'],
                 ),
                 entry['businessflow_dashboard'],
             )

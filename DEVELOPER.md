@@ -23,7 +23,7 @@ The process of adding functionality to this integration requires a few steps.
             algosec_check_host_internet_connectivity \
             algosec_list_associated_applications \
         --rule \
-            "Example: AlgoSec: Isolate Host From Network" \
+            "Isolate from Network (AlgoSec)" \
             "Example: AlgoSec: Check Host Internet Connectivity" \
             "Example: AlgoSec: List Associated Applications" \
         --workflow \
@@ -33,9 +33,7 @@ The process of adding functionality to this integration requires a few steps.
         --datatable \
             algosec_isolation_requests \
             algosec_internet_connectivity_queries \
-            algosec_associated_applications \
-        --script \
-            "Example: AlgoSec: testing a workflow postprocessing" 
+            algosec_associated_applications
         
 
 ### Adding New Components
