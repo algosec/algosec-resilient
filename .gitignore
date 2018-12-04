@@ -4,3 +4,8 @@ algosec_resilient.egg-info
 .idea
 build
 dist
+
+.DS_Store
+.coverage
+.tox
+*.pyc
