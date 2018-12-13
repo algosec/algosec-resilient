@@ -47,8 +47,6 @@ class TestAlgosecCheckHostInternetConnectivity(object):
         assert connectivity_result['is_it_connected_to_the_internet'] in ('Yes', 'Not Routed', 'No')
         # Should be something like 'https://local.algosec/fa/query/results/#/work/ALL_FIREWALLS_query-1543622562206/'
         assert re.match(
-            r'<a href="https://{}/query/results/#/work/ALL_FIREWALLS_query-\d+/">Query Results</a>'.format(
-                resilient_app_config.get('algosec', 'server_ip'),
-            ),
+            r'<a href="https://.+?/query/results/#/work/ALL_FIREWALLS_query-\d+/">Query Results</a>',
             connectivity_result['query_url']
         )

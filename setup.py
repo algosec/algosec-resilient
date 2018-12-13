@@ -13,7 +13,7 @@ FUNCTION_COMPONENTS = {
 
 setup(
     name='algosec_resilient',
-    version='1.1.0',
+    version='1.2.0',
     license='MIT',
     author='AlgoSec',
     author_email='support@algosec.com',
@@ -21,7 +21,8 @@ setup(
     description="Resilient Circuits Components For The AlgoSec Integration",
     long_description="Resilient Circuits Components For The AlgoSec Integration",
     install_requires=[
-        'resilient_circuits>=30.0.0',
+        'resilient>=31.0.0',
+        'resilient_circuits>=31.0.0',
         'algosec>=1.2.1',
     ],
     packages=find_packages(),

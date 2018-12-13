@@ -11,7 +11,7 @@ flake8 = "*"
 tox = "*"
 pytest = "*"
 pytest-cov = "*"
-pytest-resilient-circuits = "*"
+pytest-resilient-circuits = ">=31.0.0"
 mock = "*"
 six = "*"
 
