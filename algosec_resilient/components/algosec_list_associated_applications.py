@@ -22,7 +22,7 @@ class AlgoSecListAssociatedApplications(AlgoSecComponent):
         Provides better assessment the risk of the incident. The results contain whether or not it's a critical
         application and a url link to the application on the AlgoSec BusinessFlow dashboard.
         """
-        self.run_login(kwargs)
+        return self.run_login(kwargs)
 
     def _logic(self, algosec_hostname):
         """The @function decorator offerend by resilient circuits is impossible to unit test..."""
