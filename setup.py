@@ -23,7 +23,7 @@ setup(
     install_requires=[
         'resilient>=31.0.0',
         'resilient_circuits>=31.0.0',
-        'algosec>=1.2.1',
+        'algosec>=1.3.0',
     ],
     packages=find_packages(),
     include_package_data=True,

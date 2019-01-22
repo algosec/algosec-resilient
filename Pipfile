@@ -4,12 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-algosec-resilient = {editable = true, path = "."}
+algosec-resilient = {editable = true,path = "."}
 
 [dev-packages]
 flake8 = "*"
 tox = "*"
-pytest = "*"
+# pytest-resilient-circuits support pytest version before 4.1.0
+pytest = "<4.1.0"
 pytest-cov = "*"
 pytest-resilient-circuits = ">=31.0.0"
 mock = "*"
