@@ -13,7 +13,7 @@ FUNCTION_COMPONENTS = {
 
 setup(
     name='algosec_resilient',
-    version='1.2.0',
+    version='1.3.0',
     license='MIT',
     author='AlgoSec',
     author_email='support@algosec.com',
